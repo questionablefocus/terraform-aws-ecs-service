@@ -1,6 +1,15 @@
 data "aws_region" "current" {}
 
 locals {
+  # Compute total CPU and memory from all containers
+  total_cpu = sum([
+    for container in var.containers : lookup(container, "cpu", 0)
+  ])
+
+  total_memory = sum([
+    for container in var.containers : lookup(container, "memory", 0)
+  ])
+
   containers_with_logging = [
     for container in var.containers : merge(container, {
       logConfiguration = {
@@ -19,8 +28,8 @@ resource "aws_ecs_task_definition" "main" {
   family                   = var.name
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = var.cpu
-  memory                   = var.memory
+  cpu                      = local.total_cpu
+  memory                   = local.total_memory
   execution_role_arn       = var.task_execution_role_arn
   task_role_arn            = var.task_role_arn
 
