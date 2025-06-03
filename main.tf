@@ -1,13 +1,13 @@
 resource "aws_ecs_service" "main" {
   name            = var.name
   cluster         = var.cluster_id
-  task_definition = aws_ecs_task_definition.task.arn
+  task_definition = aws_ecs_task_definition.main.arn
   desired_count   = var.desired_count
   launch_type     = "FARGATE"
 
   network_configuration {
     subnets          = var.subnet_ids
-    security_groups  = [aws_security_group.ecs_service.id]
+    security_groups  = [aws_security_group.main.id]
     assign_public_ip = false
   }
 }

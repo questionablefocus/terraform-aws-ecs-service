@@ -1,6 +1,6 @@
 data "aws_region" "current" {}
 
-resource "aws_ecs_task_definition" "task" {
+resource "aws_ecs_task_definition" "main" {
   family                   = var.name
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
