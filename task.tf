@@ -27,25 +27,5 @@ resource "aws_ecs_task_definition" "main" {
     }
   }
 
-  container_definitions = jsonencode([
-    for container in var.containers : {
-      name      = container.name
-      image     = container.image_uri
-      essential = container.essential
-      portMappings = [
-        {
-          containerPort = container.port
-          protocol      = "tcp"
-        }
-      ]
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          "awslogs-group"         = "/ecs/${var.name}"
-          "awslogs-region"        = data.aws_region.current.name
-          "awslogs-stream-prefix" = "ecs"
-        }
-      }
-    }
-  ])
+  container_definitions = jsonencode(var.containers)
 }

@@ -20,12 +20,7 @@ variable "subnet_ids" {
 
 variable "containers" {
   description = "List of container definitions"
-  type = list(object({
-    name      = string
-    image_uri = string
-    port      = number
-    essential = optional(bool, true)
-  }))
+  type        = list(object({}))
 }
 
 variable "cpu" {
