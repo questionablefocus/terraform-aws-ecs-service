@@ -10,6 +10,15 @@ resource "aws_ecs_service" "main" {
     security_groups  = [aws_security_group.main.id]
     assign_public_ip = false
   }
+
+  dynamic "load_balancer" {
+    for_each = var.load_balancers
+    content {
+      target_group_arn = load_balancer.value.target_group_arn
+      container_name   = load_balancer.value.container_name
+      container_port   = load_balancer.value.container_port
+    }
+  }
 }
 
 resource "aws_security_group" "main" {

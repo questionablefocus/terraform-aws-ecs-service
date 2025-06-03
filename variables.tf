@@ -98,3 +98,13 @@ variable "efs_volume_name" {
     error_message = "efs_volume_name and efs_root_directory must be provided together or both must be null."
   }
 }
+
+variable "load_balancers" {
+  description = "Load balancer configuration for the ECS service"
+  type = list(object({
+    target_group_arn = string
+    container_name   = string
+    container_port   = number
+  }))
+  default = []
+}
