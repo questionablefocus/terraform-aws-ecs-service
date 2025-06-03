@@ -87,3 +87,14 @@ variable "efs_root_directory" {
   type        = string
   default     = null
 }
+
+variable "efs_volume_name" {
+  description = "Name of the EFS volume"
+  type        = string
+  default     = null
+
+  validation {
+    condition     = (var.efs_volume_name == null && var.efs_root_directory == null) || (var.efs_volume_name != null && var.efs_root_directory != null)
+    error_message = "efs_volume_name and efs_root_directory must be provided together or both must be null."
+  }
+}
