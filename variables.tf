@@ -20,7 +20,31 @@ variable "subnet_ids" {
 
 variable "containers" {
   description = "List of container definitions"
-  type        = list(object({}))
+  type = list(object({
+    name      = string
+    image     = string
+    cpu       = optional(number, 0)
+    memory    = optional(number, 0)
+    essential = optional(bool, true)
+    portMappings = optional(list(object({
+      containerPort = number
+      hostPort      = optional(number)
+      protocol      = optional(string)
+    })), [])
+    environment = optional(list(object({
+      name  = string
+      value = string
+    })), [])
+    secrets = optional(list(object({
+      name      = string
+      valueFrom = string
+    })), [])
+    mountPoints = optional(list(object({
+      sourceVolume  = string
+      containerPath = string
+      readOnly      = optional(bool, false)
+    })), [])
+  }))
 
   validation {
     condition = alltrue([
