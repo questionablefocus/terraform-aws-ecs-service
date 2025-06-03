@@ -21,6 +21,13 @@ variable "subnet_ids" {
 variable "containers" {
   description = "List of container definitions"
   type        = list(object({}))
+
+  validation {
+    condition = alltrue([
+      for container in var.containers : !contains(keys(container), "logConfiguration")
+    ])
+    error_message = "logConfiguration should not be provided in container definitions. Logging is automatically configured to use the CloudWatch log group."
+  }
 }
 
 variable "cpu" {

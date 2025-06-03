@@ -1,5 +1,20 @@
 data "aws_region" "current" {}
 
+locals {
+  containers_with_logging = [
+    for container in var.containers : merge(container, {
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = aws_cloudwatch_log_group.main.name
+          "awslogs-region"        = data.aws_region.current.name
+          "awslogs-stream-prefix" = container.name
+        }
+      }
+    })
+  ]
+}
+
 resource "aws_ecs_task_definition" "main" {
   family                   = var.name
   network_mode             = "awsvpc"
@@ -27,5 +42,5 @@ resource "aws_ecs_task_definition" "main" {
     }
   }
 
-  container_definitions = jsonencode(var.containers)
+  container_definitions = jsonencode(local.containers_with_logging)
 }
