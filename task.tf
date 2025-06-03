@@ -37,7 +37,7 @@ resource "aws_ecs_task_definition" "main" {
     for_each = var.efs_root_directory != null ? { efs_volume = true } : {}
 
     content {
-      name = "efs-volume"
+      name = "${var.name}-storage"
 
       efs_volume_configuration {
         file_system_id     = aws_efs_file_system.main[0].id
