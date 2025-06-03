@@ -19,6 +19,16 @@ resource "aws_ecs_service" "main" {
       container_port   = load_balancer.value.container_port
     }
   }
+
+  dynamic "service_registries" {
+    for_each = var.service_registries
+    content {
+      registry_arn   = service_registries.value.registry_arn
+      port           = service_registries.value.port
+      container_name = service_registries.value.container_name
+      container_port = service_registries.value.container_port
+    }
+  }
 }
 
 resource "aws_security_group" "main" {

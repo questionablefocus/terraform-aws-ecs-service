@@ -108,3 +108,14 @@ variable "load_balancers" {
   }))
   default = []
 }
+
+variable "service_registries" {
+  description = "Service discovery registries for the service"
+  type = list(object({
+    registry_arn   = string
+    port           = optional(number)
+    container_name = optional(string)
+    container_port = optional(number)
+  }))
+  default = []
+}
