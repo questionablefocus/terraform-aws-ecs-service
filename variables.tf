@@ -67,3 +67,9 @@ variable "ingress_rules" {
   }))
   default = []
 }
+
+variable "efs_root_directory" {
+  description = "Root directory of the EFS file system"
+  type        = string
+  default     = null
+}
