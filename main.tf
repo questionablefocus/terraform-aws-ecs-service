@@ -10,8 +10,6 @@ resource "aws_ecs_service" "main" {
     security_groups  = [aws_security_group.main.id]
     assign_public_ip = false
   }
-
-  depends_on = var.efs_root_directory != null ? [aws_efs_mount_target.main] : []
 }
 
 resource "aws_security_group" "main" {
