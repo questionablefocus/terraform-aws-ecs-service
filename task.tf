@@ -23,13 +23,13 @@ locals {
   task_cpu = min([
     for cpu, memories in local.valid_fargate_configs : tonumber(cpu)
     if tonumber(cpu) >= local.total_container_cpu
-  ])
+  ]...)
 
   # Find the smallest valid memory for the selected CPU that can accommodate the containers
   task_memory = min([
     for memory in local.valid_fargate_configs[tostring(local.task_cpu)] : memory
     if memory >= local.total_container_memory
-  ])
+  ]...)
 
   containers_with_logging = [
     for container in var.containers : merge(container, {
