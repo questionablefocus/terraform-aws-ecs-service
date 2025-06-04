@@ -1,12 +1,11 @@
 data "aws_region" "current" {}
 
 locals {
-  # Compute total CPU and memory from all containers
-  total_cpu = sum([
+  total_cpu = max([
     for container in var.containers : lookup(container, "cpu", 0)
   ])
 
-  total_memory = sum([
+  total_memory = max([
     for container in var.containers : lookup(container, "memory", 0)
   ])
 
