@@ -1,13 +1,13 @@
 data "aws_region" "current" {}
 
 locals {
-  total_cpu = max([
-    for container in var.containers : lookup(container, "cpu", 0)
-  ])
+  max_cpu = max([
+    for container in var.containers : container.cpu
+  ]...)
 
-  total_memory = max([
-    for container in var.containers : lookup(container, "memory", 0)
-  ])
+  max_memory = max([
+    for container in var.containers : container.memory
+  ]...)
 
   containers_with_logging = [
     for container in var.containers : merge(container, {
@@ -27,8 +27,8 @@ resource "aws_ecs_task_definition" "main" {
   family                   = var.name
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = local.total_cpu
-  memory                   = local.total_memory
+  cpu                      = local.max_cpu
+  memory                   = local.max_memory
   execution_role_arn       = var.task_execution_role_arn
   task_role_arn            = var.task_role_arn
 
