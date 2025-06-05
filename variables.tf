@@ -99,6 +99,28 @@ variable "efs_volume_name" {
   }
 }
 
+variable "efs_provisioned_throughput" {
+  description = "Provisioned throughput in Mibps for the EFS file system. Required when throughput_mode is 'provisioned'."
+  type        = number
+  default     = null
+}
+
+variable "efs_throughput_mode" {
+  description = "Throughput mode for the EFS file system. Can be 'bursting', 'provisioned', or 'elastic'."
+  type        = string
+  default     = "bursting"
+
+  validation {
+    condition     = contains(["bursting", "provisioned", "elastic"], var.efs_throughput_mode)
+    error_message = "Throughput mode must be one of: bursting, provisioned, or elastic."
+  }
+
+  validation {
+    condition     = (var.efs_throughput_mode == "provisioned" && var.efs_provisioned_throughput != null) || var.efs_throughput_mode != "provisioned"
+    error_message = "Provisioned throughput must be specified when throughput mode is 'provisioned'."
+  }
+}
+
 variable "load_balancers" {
   description = "Load balancer configuration for the ECS service"
   type = list(object({

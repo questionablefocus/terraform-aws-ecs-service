@@ -2,8 +2,8 @@ resource "aws_efs_file_system" "main" {
   count                           = var.efs_root_directory != null ? 1 : 0
   creation_token                  = "${var.name}-storage"
   performance_mode                = "generalPurpose"
-  throughput_mode                 = "provisioned"
-  provisioned_throughput_in_mibps = 100
+  throughput_mode                 = var.efs_throughput_mode
+  provisioned_throughput_in_mibps = var.efs_provisioned_throughput
   encrypted                       = true
 }
 
