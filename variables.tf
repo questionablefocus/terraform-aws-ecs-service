@@ -3,6 +3,21 @@ variable "name" {
   type        = string
 }
 
+variable "task_cpu" {
+  description = "CPU units for the task (valid values: 256, 512, 1024, 2048, 4096)"
+  type        = number
+
+  validation {
+    condition     = contains([256, 512, 1024, 2048, 4096], var.task_cpu)
+    error_message = "Task CPU must be one of: 256, 512, 1024, 2048, 4096"
+  }
+}
+
+variable "task_memory" {
+  description = "Memory for the task in MiB"
+  type        = number
+}
+
 variable "cluster_id" {
   description = "ID of the ECS cluster"
   type        = string
@@ -23,8 +38,8 @@ variable "containers" {
   type = list(object({
     name      = string
     image     = string
-    cpu       = optional(number, 0)
-    memory    = optional(number, 0)
+    cpu       = optional(number)
+    memory    = optional(number)
     essential = optional(bool, true)
     portMappings = optional(list(object({
       containerPort = number
