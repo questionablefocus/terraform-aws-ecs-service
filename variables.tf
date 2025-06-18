@@ -73,6 +73,44 @@ variable "desired_count" {
   description = "Number of tasks to run"
   type        = number
   default     = 1
+
+  validation {
+    condition     = !var.enable_autoscaling || (var.desired_count >= var.min_capacity && var.desired_count <= var.max_capacity)
+    error_message = "Desired count must be between min_capacity and max_capacity when autoscaling is enabled."
+  }
+}
+
+variable "enable_autoscaling" {
+  description = "Whether to enable autoscaling for the ECS service"
+  type        = bool
+  default     = false
+}
+
+variable "min_capacity" {
+  description = "Minimum number of tasks for autoscaling"
+  type        = number
+  default     = 1
+
+  validation {
+    condition     = var.min_capacity >= 0
+    error_message = "Min capacity must be 0 or greater."
+  }
+}
+
+variable "max_capacity" {
+  description = "Maximum number of tasks for autoscaling"
+  type        = number
+  default     = 10
+
+  validation {
+    condition     = var.max_capacity > 0
+    error_message = "Max capacity must be greater than 0."
+  }
+
+  validation {
+    condition     = var.max_capacity >= var.min_capacity
+    error_message = "Max capacity must be greater than or equal to min capacity."
+  }
 }
 
 variable "task_execution_role_arn" {

@@ -38,3 +38,23 @@ output "efs_security_group_id" {
   value       = var.efs_root_directory != null ? aws_security_group.efs[0].id : null
 }
 
+output "autoscaling_target_id" {
+  description = "ID of the Application Auto Scaling target"
+  value       = var.enable_autoscaling ? aws_appautoscaling_target.main[0].id : null
+}
+
+output "autoscaling_target_resource_id" {
+  description = "Resource ID of the Application Auto Scaling target (for use in external scaling policies)"
+  value       = var.enable_autoscaling ? aws_appautoscaling_target.main[0].resource_id : null
+}
+
+output "autoscaling_target_scalable_dimension" {
+  description = "Scalable dimension of the Application Auto Scaling target (for use in external scaling policies)"
+  value       = var.enable_autoscaling ? aws_appautoscaling_target.main[0].scalable_dimension : null
+}
+
+output "autoscaling_target_service_namespace" {
+  description = "Service namespace of the Application Auto Scaling target (for use in external scaling policies)"
+  value       = var.enable_autoscaling ? aws_appautoscaling_target.main[0].service_namespace : null
+}
+
