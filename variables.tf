@@ -199,3 +199,9 @@ variable "service_registries" {
   }))
   default = []
 }
+
+variable "security_group_ids" {
+  description = "Additional security group IDs to attach to the ECS service"
+  type        = list(string)
+  default     = []
+}
