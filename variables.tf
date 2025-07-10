@@ -46,6 +46,7 @@ variable "containers" {
     cpu       = optional(number)
     memory    = optional(number)
     essential = optional(bool, true)
+    user      = optional(string)
     portMappings = optional(list(object({
       containerPort = number
       hostPort      = optional(number)
